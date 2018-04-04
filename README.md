@@ -107,6 +107,7 @@ COMMANDS:
 GLOBAL OPTIONS:
    --file FILE, -f FILE         load config from FILE (default: "helmfile.yaml")
    --quiet, -q                  silence output
+   --hide-args                  hide helm args
    --namespace value, -n value  Set namespace. Uses the namespace set in the context by default
    --selector,l value           Only run using the releases that match labels. Labels can take the form of foo=bar or foo!=bar.
 	                              A release must match all labels in a group in order to be used. Multiple groups can be specified at once.

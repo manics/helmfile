@@ -37,6 +37,10 @@ func main() {
 			Name:  "quiet, q",
 			Usage: "silence output",
 		},
+		cli.BoolFlag{
+			Name:  "hide-args",
+			Usage: "hide helm args",
+		},
 		cli.StringFlag{
 			Name:  "kube-context",
 			Usage: "Set kubectl context. Uses current context by default",
@@ -237,6 +241,7 @@ func main() {
 func before(c *cli.Context) (*state.HelmState, helmexec.Interface, error) {
 	file := c.GlobalString("file")
 	quiet := c.GlobalBool("quiet")
+	hideArgs := c.GlobalBool("hide-args")
 	kubeContext := c.GlobalString("kube-context")
 	namespace := c.GlobalString("namespace")
 	labels := c.GlobalStringSlice("selector")
@@ -290,7 +295,7 @@ func before(c *cli.Context) (*state.HelmState, helmexec.Interface, error) {
 		clean(st, errs)
 	}()
 
-	return st, helmexec.New(writer, kubeContext), nil
+	return st, helmexec.New(writer, kubeContext, hideArgs), nil
 }
 
 func clean(state *state.HelmState, errs []error) error {

@@ -15,13 +15,15 @@ type execer struct {
 	writer      io.Writer
 	kubeContext string
 	extra       []string
+	hideArgs    bool
 }
 
-func New(writer io.Writer, kubeContext string) *execer {
+func New(writer io.Writer, kubeContext string, hideArgs bool) *execer {
 	return &execer{
 		writer:      writer,
 		kubeContext: kubeContext,
 		runner:      &ShellRunner{},
+		hideArgs:    hideArgs,
 	}
 }
 
@@ -84,7 +86,9 @@ func (helm *execer) exec(args ...string) ([]byte, error) {
 	if helm.kubeContext != "" {
 		cmdargs = append(cmdargs, "--kube-context", helm.kubeContext)
 	}
-	helm.write([]byte(fmt.Sprintf("exec: helm %s\n", strings.Join(cmdargs, " "))))
+  if !helm.hideArgs {
+	  helm.write([]byte(fmt.Sprintf("exec: helm %s\n", strings.Join(cmdargs, " "))))
+  }
 	return helm.runner.Execute(command, cmdargs)
 }
 
